@@ -1,13 +1,14 @@
 language: minimal
 
+dist: focal
+
 services:
   - docker
 
 before_install:
   - echo "Stage [Test] - Step [before_install] ..."
-  - sudo add-apt-repository ppa:duggan/bats --yes
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq bats
+  - sudo apt update -y
+  - sudo apt install -y bats
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
@@ -48,7 +49,6 @@ after_success:
 addons:
   apt:
     packages:
-      - docker-ce
       - pass
 
 notifications:
@@ -57,7 +57,7 @@ notifications:
 env:
   global:
     - DOCKER_COMPOSE_VERSION=1.27.4
-    - ELASTICMS_VERSION=1.14.19
+    - ELASTICMS_VERSION=1.14.18
     - RELEASE_NUMBER=$TRAVIS_BUILD_NUMBER
     - VCS_REF=${TRAVIS_COMMIT}
     - BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
