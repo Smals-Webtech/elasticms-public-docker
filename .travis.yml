@@ -57,7 +57,7 @@ notifications:
 env:
   global:
     - DOCKER_COMPOSE_VERSION=1.27.4
-    - ELASTICMS_VERSION=1.14.18
+    - ELASTICMS_VERSION=1.14.21
     - RELEASE_NUMBER=$TRAVIS_BUILD_NUMBER
     - VCS_REF=${TRAVIS_COMMIT}
     - BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`

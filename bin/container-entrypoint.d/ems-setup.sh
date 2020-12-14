@@ -215,76 +215,6 @@ EOL
 
 }
 
-function configure-symfony-session-handler {
-
-  if ! [ -z ${REDIS_HOST+x} ]; then
-    echo "Configure Session Handler for Redis and use [ $REDIS_HOST:$REDIS_PORT ] as backend host ..."
-    cat >> /opt/src/config/packages/framework.yaml <<EOL
-    session:
-        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
-EOL
-  elif ! [ -z ${DB_DRIVER+x} ]; then
-    if [ ${DB_DRIVER} = sqlite ]; then
-      echo "Configure Session Handler for files ..."
-      cat >> /opt/src/config/packages/framework.yaml <<EOL
-    session:
-        handler_id: ~
-EOL
-    else
-      echo "Configure Session Handler for PDO and use [ $DB_HOST:$DB_PORT ] as backend host ..."
-      cat >> /opt/src/config/packages/framework.yaml <<EOL
-    session:
-        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-EOL
-    fi
-  else
-    echo "Configure Session Handler for files ..."
-    cat >> /opt/src/config/packages/framework.yaml <<EOL
-    session:
-        handler_id: ~
-EOL
-  fi
-
-}
-
-function configure-symfony-framework {
-
-  cat >/opt/src/config/packages/framework.yaml <<EOL
-framework:
-    secret: '%env(APP_SECRET)%'
-    default_locale: en
-
-    #csrf_protection: true
-    #http_method_override: true
-
-    #esi: true
-    #fragments: true
-    php_errors:
-        log: true
-
-    fragments:
-    error_controller: 'App\Controller\MyExceptionController'
-
-    cache:
-        # Put the unique name of your app here: the prefix seed
-        # is used to compute stable namespaces for cache keys.
-        #prefix_seed: your_vendor_name/app_name
-
-        # The app cache caches to the filesystem by default.
-        # Other options include:
-
-        # Redis
-        #app: cache.adapter.redis
-        #default_redis_provider: redis://localhost
-
-        # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
-        #app: cache.adapter.apcu
-EOL
-
-  configure-symfony-session-handler
-
-}
-
 function configure {
   local -r _name=$1
 
@@ -343,8 +273,6 @@ function configure {
 }
 
 function install {
-
-  configure-symfony-framework
 
   if [ ! -z "$AWS_S3_CONFIG_BUCKET_NAME" ]; then
     echo "Found AWS_S3_CONFIG_BUCKET_NAME environment variable.  Reading properties files ..."

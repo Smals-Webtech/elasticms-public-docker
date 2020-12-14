@@ -112,7 +112,6 @@ export BATS_EMS_DOCKER_IMAGE_NAME="${EMS_DOCKER_IMAGE_NAME:-docker.io/elasticms/
     docker_wait_for_log ems 15 "Elasticms warming up for \[ ${_name} \] CMS Domain run successfully ..."
   done
 
-  docker_wait_for_log ems 15 "Configure Session Handler for PDO"
   docker_wait_for_log ems 15 "NOTICE: ready to handle connections"
   docker_wait_for_log ems 15 "AH00292: Apache/.* \(Unix\) OpenSSL/.* configured -- resuming normal operations"
 
